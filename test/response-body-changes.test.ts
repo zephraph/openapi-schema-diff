@@ -1,7 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 const compareOpenApiSchemas = require("../index.js");
 
-test("adding response body schema", () => {
+Deno.test(function adding_response_body_schema() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -56,10 +56,9 @@ test("adding response body schema", () => {
             statusCode: "200",
             mediaType: "application/json",
             sourceSchema: undefined,
-            targetSchema:
-              target.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
+            targetSchema: target.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
             comment:
               'response body for "200" status code and "application/json" media type has been added to GET "/foo" route',
           },
@@ -69,7 +68,7 @@ test("adding response body schema", () => {
   });
 });
 
-test("adding response body schema for status code", () => {
+Deno.test(function adding_response_body_schema_for_status_code() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -128,10 +127,9 @@ test("adding response body schema for status code", () => {
             statusCode: "200",
             mediaType: "application/json",
             sourceSchema: undefined,
-            targetSchema:
-              target.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
+            targetSchema: target.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
             comment:
               'response body for "200" status code and "application/json" media type has been added to GET "/foo" route',
           },
@@ -141,7 +139,7 @@ test("adding response body schema for status code", () => {
   });
 });
 
-test("removing response body schemas", () => {
+Deno.test(function removing_response_body_schemas() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -195,10 +193,9 @@ test("removing response body schemas", () => {
             action: "deleted",
             statusCode: "200",
             mediaType: "application/json",
-            sourceSchema:
-              source.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
+            sourceSchema: source.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
             targetSchema: undefined,
             comment:
               'response body for "200" status code and "application/json" media type has been deleted from GET "/foo" route',
@@ -209,7 +206,7 @@ test("removing response body schemas", () => {
   });
 });
 
-test("removing response body schema for status code", () => {
+Deno.test(function removing_response_body_schema_for_status_code() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -267,10 +264,9 @@ test("removing response body schema for status code", () => {
             statusCode: "200",
             mediaType: "application/json",
             action: "deleted",
-            sourceSchema:
-              source.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
+            sourceSchema: source.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
             targetSchema: undefined,
             comment:
               'response body for "200" status code and "application/json" media type has been deleted from GET "/foo" route',
@@ -281,7 +277,7 @@ test("removing response body schema for status code", () => {
   });
 });
 
-test("adding response body schema property", () => {
+Deno.test(function adding_response_body_schema_property() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -347,14 +343,12 @@ test("adding response body schema property", () => {
             action: "changed",
             statusCode: "200",
             mediaType: "application/json",
-            sourceSchema:
-              source.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
-            targetSchema:
-              target.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
+            sourceSchema: source.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
+            targetSchema: target.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
             changes: [
               {
                 keyword: "schema",
@@ -381,7 +375,7 @@ test("adding response body schema property", () => {
   });
 });
 
-test("removing schema property", () => {
+Deno.test(function removing_schema_property() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -447,14 +441,12 @@ test("removing schema property", () => {
             statusCode: "200",
             mediaType: "application/json",
             action: "changed",
-            sourceSchema:
-              source.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
-            targetSchema:
-              target.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
+            sourceSchema: source.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
+            targetSchema: target.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
             changes: [
               {
                 keyword: "schema",
@@ -481,7 +473,7 @@ test("removing schema property", () => {
   });
 });
 
-test("adding schema property", () => {
+Deno.test(function adding_schema_property() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -547,14 +539,12 @@ test("adding schema property", () => {
             action: "changed",
             statusCode: "200",
             mediaType: "application/json",
-            sourceSchema:
-              source.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
-            targetSchema:
-              target.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
+            sourceSchema: source.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
+            targetSchema: target.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
             changes: [
               {
                 keyword: "schema",

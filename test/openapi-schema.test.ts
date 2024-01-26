@@ -1,7 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 const compareOpenApiSchemas = require("../index.js");
 
-test("should throw if source schema is not an object", () => {
+Deno.test(function should_throw_if_source_schema_is_not_an_object() {
   const source = 3;
   const target = { openapi: "1.0.0", paths: {} };
 
@@ -13,7 +13,7 @@ test("should throw if source schema is not an object", () => {
   }
 });
 
-test("should throw if target schema is not an object", () => {
+Deno.test(function should_throw_if_target_schema_is_not_an_object() {
   const source = { openapi: "1.0.0", paths: {} };
   const target = 3;
 
@@ -25,7 +25,7 @@ test("should throw if target schema is not an object", () => {
   }
 });
 
-test("should throw if source schema is null", () => {
+Deno.test(function should_throw_if_source_schema_is_null() {
   const source = null;
   const target = { openapi: "1.0.0", paths: {} };
 
@@ -37,7 +37,7 @@ test("should throw if source schema is null", () => {
   }
 });
 
-test("should throw if target schema is null", () => {
+Deno.test(function should_throw_if_target_schema_is_null() {
   const source = { openapi: "1.0.0", paths: {} };
   const target = null;
 

@@ -1,0 +1,17 @@
+id: test-to-deno-test.yaml
+message: rewrite node tests to deno tests
+language: typescript
+severity: error # error, warning, info, hint
+files:
+  - ./test/**.ts
+rule:
+  any:
+    - pattern: test("$MATCH", () => { $$$BODY })
+transform:
+  FN:
+    replace:
+      replace: \W
+      by: _
+      source: $MATCH
+fix:
+  Deno.test(function $FN() { $$$BODY })

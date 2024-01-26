@@ -1,7 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 const compareOpenApiSchemas = require("../index.js");
 
-test("adding request body schema property value", () => {
+Deno.test(function adding_request_body_schema_property_value() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -64,7 +64,7 @@ test("adding request body schema property value", () => {
   });
 });
 
-test("changing request body schema property value", () => {
+Deno.test(function changing_request_body_schema_property_value() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -156,7 +156,7 @@ test("changing request body schema property value", () => {
   });
 });
 
-test("removing request body schema property value", () => {
+Deno.test(function removing_request_body_schema_property_value() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -219,139 +219,143 @@ test("removing request body schema property value", () => {
   });
 });
 
-test("making request body required should count as a breaking change", () => {
-  const source = {
-    openapi: "1.0.0",
-    paths: {
-      "/foo": {
-        get: {
-          requestBody: {
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
+Deno.test(
+  function making_request_body_required_should_count_as_a_breaking_change() {
+    const source = {
+      openapi: "1.0.0",
+      paths: {
+        "/foo": {
+          get: {
+            requestBody: {
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                  },
+                  required: false,
                 },
-                required: false,
               },
             },
           },
         },
       },
-    },
-  };
+    };
 
-  const target = {
-    openapi: "1.0.0",
-    paths: {
-      "/foo": {
-        get: {
-          requestBody: {
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
+    const target = {
+      openapi: "1.0.0",
+      paths: {
+        "/foo": {
+          get: {
+            requestBody: {
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                  },
+                  required: true,
                 },
-                required: true,
               },
             },
           },
         },
       },
-    },
-  };
+    };
 
-  const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
-    isEqual: false,
-    sameRoutes: [],
-    addedRoutes: [],
-    deletedRoutes: [],
-    changedRoutes: [
-      {
-        method: "get",
-        path: "/foo",
-        sourceSchema: source.paths["/foo"].get,
-        targetSchema: target.paths["/foo"].get,
-        changes: [
-          {
-            type: "requestBody",
-            mediaType: "application/json",
-            action: "changed",
-            sourceSchema:
-              source.paths["/foo"].get.requestBody.content["application/json"],
-            targetSchema:
-              target.paths["/foo"].get.requestBody.content["application/json"],
-            changes: [
-              {
-                keyword: "required",
-                source: false,
-                target: true,
-                comment: "request body has been made required",
-              },
-            ],
-            comment:
-              'request body for "application/json" media type has been changed in GET "/foo" route',
-          },
-        ],
-      },
-    ],
-  });
-});
-
-test("making request body optional should count as a breaking change", () => {
-  const source = {
-    openapi: "1.0.0",
-    paths: {
-      "/foo": {
-        get: {
-          requestBody: {
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
+    const diff = compareOpenApiSchemas(source, target);
+    assert.deepStrictEqual(diff, {
+      isEqual: false,
+      sameRoutes: [],
+      addedRoutes: [],
+      deletedRoutes: [],
+      changedRoutes: [
+        {
+          method: "get",
+          path: "/foo",
+          sourceSchema: source.paths["/foo"].get,
+          targetSchema: target.paths["/foo"].get,
+          changes: [
+            {
+              type: "requestBody",
+              mediaType: "application/json",
+              action: "changed",
+              sourceSchema: source.paths["/foo"].get.requestBody
+                .content["application/json"],
+              targetSchema: target.paths["/foo"].get.requestBody
+                .content["application/json"],
+              changes: [
+                {
+                  keyword: "required",
+                  source: false,
+                  target: true,
+                  comment: "request body has been made required",
                 },
-                required: true,
+              ],
+              comment:
+                'request body for "application/json" media type has been changed in GET "/foo" route',
+            },
+          ],
+        },
+      ],
+    });
+  },
+);
+
+Deno.test(
+  function making_request_body_optional_should_count_as_a_breaking_change() {
+    const source = {
+      openapi: "1.0.0",
+      paths: {
+        "/foo": {
+          get: {
+            requestBody: {
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                  },
+                  required: true,
+                },
               },
             },
           },
         },
       },
-    },
-  };
+    };
 
-  const target = {
-    openapi: "1.0.0",
-    paths: {
-      "/foo": {
-        get: {
-          requestBody: {
-            content: {
-              "application/json": {
-                schema: {
-                  type: "object",
+    const target = {
+      openapi: "1.0.0",
+      paths: {
+        "/foo": {
+          get: {
+            requestBody: {
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                  },
+                  required: false,
                 },
-                required: false,
               },
             },
           },
         },
       },
-    },
-  };
+    };
 
-  const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
-    isEqual: true,
-    sameRoutes: [
-      {
-        method: "get",
-        path: "/foo",
-        sourceSchema: source.paths["/foo"].get,
-        targetSchema: target.paths["/foo"].get,
-      },
-    ],
-    addedRoutes: [],
-    deletedRoutes: [],
-    changedRoutes: [],
-  });
-});
+    const diff = compareOpenApiSchemas(source, target);
+    assert.deepStrictEqual(diff, {
+      isEqual: true,
+      sameRoutes: [
+        {
+          method: "get",
+          path: "/foo",
+          sourceSchema: source.paths["/foo"].get,
+          targetSchema: target.paths["/foo"].get,
+        },
+      ],
+      addedRoutes: [],
+      deletedRoutes: [],
+      changedRoutes: [],
+    });
+  },
+);

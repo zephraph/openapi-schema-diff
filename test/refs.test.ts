@@ -1,7 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 const compareOpenApiSchemas = require("../index.js");
 
-test("modifying routes schema through ref", () => {
+Deno.test(function modifying_routes_schema_through_ref() {
   const source = {
     openapi: "1.0.0",
     components: {
@@ -86,14 +86,12 @@ test("modifying routes schema through ref", () => {
             action: "changed",
             statusCode: "200",
             mediaType: "application/json",
-            sourceSchema:
-              source.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
-            targetSchema:
-              target.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
+            sourceSchema: source.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
+            targetSchema: target.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
             changes: [
               {
                 keyword: "schema",
@@ -116,7 +114,7 @@ test("modifying routes schema through ref", () => {
   });
 });
 
-test("different $ref property values", () => {
+Deno.test(function different__ref_property_values() {
   const source = {
     openapi: "1.0.0",
     components: {
@@ -201,14 +199,12 @@ test("different $ref property values", () => {
             action: "changed",
             statusCode: "200",
             mediaType: "application/json",
-            sourceSchema:
-              source.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
-            targetSchema:
-              target.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
+            sourceSchema: source.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
+            targetSchema: target.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
             changes: [
               {
                 keyword: "schema",
@@ -231,7 +227,7 @@ test("different $ref property values", () => {
   });
 });
 
-test("compare two equal schemas with circular refs", () => {
+Deno.test(function compare_two_equal_schemas_with_circular_refs() {
   const source = {
     openapi: "1.0.0",
     components: {
@@ -287,7 +283,7 @@ test("compare two equal schemas with circular refs", () => {
   });
 });
 
-test("compare two different schemas with circular refs", () => {
+Deno.test(function compare_two_different_schemas_with_circular_refs() {
   const source = {
     openapi: "1.0.0",
     components: {
@@ -378,14 +374,12 @@ test("compare two different schemas with circular refs", () => {
             action: "changed",
             statusCode: "200",
             mediaType: "application/json",
-            sourceSchema:
-              source.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
-            targetSchema:
-              target.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
+            sourceSchema: source.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
+            targetSchema: target.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
             changes: [
               {
                 keyword: "schema",
@@ -408,7 +402,7 @@ test("compare two different schemas with circular refs", () => {
   });
 });
 
-test("compare two equal schemas with cross circular refs", () => {
+Deno.test(function compare_two_equal_schemas_with_cross_circular_refs() {
   const source = {
     openapi: "1.0.0",
     components: {
@@ -475,7 +469,7 @@ test("compare two equal schemas with cross circular refs", () => {
   });
 });
 
-test("compare two different schemas with cross circular refs", () => {
+Deno.test(function compare_two_different_schemas_with_cross_circular_refs() {
   const source = {
     openapi: "1.0.0",
     components: {
@@ -588,14 +582,12 @@ test("compare two different schemas with cross circular refs", () => {
             action: "changed",
             statusCode: "200",
             mediaType: "application/json",
-            sourceSchema:
-              source.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
-            targetSchema:
-              target.paths["/foo"].get.responses["200"].content[
-                "application/json"
-              ],
+            sourceSchema: source.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
+            targetSchema: target.paths["/foo"].get.responses["200"].content[
+              "application/json"
+            ],
             changes: [
               {
                 keyword: "schema",

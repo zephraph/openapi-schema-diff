@@ -1,7 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 const compareOpenApiSchemas = require("../index.js");
 
-test("should not count summery and description properties", () => {
+Deno.test(function should_not_count_summery_and_description_properties() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -113,7 +113,7 @@ test("should not count summery and description properties", () => {
   });
 });
 
-test("should not count summery and description properties", () => {
+Deno.test(function should_not_count_summery_and_description_properties() {
   const source = {
     openapi: "1.0.0",
     paths: {

@@ -1,7 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 const compareOpenApiSchemas = require("../index.js");
 
-test("compare two equal schemas", () => {
+Deno.test(function compare_two_equal_schemas() {
   const source = {
     openapi: "1.0.0",
     paths: {

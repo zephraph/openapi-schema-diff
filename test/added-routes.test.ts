@@ -1,7 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 const compareOpenApiSchemas = require("../index.js");
 
-test("adding new route", () => {
+Deno.test(function adding_new_route() {
   const source = {
     openapi: "1.0.0",
     paths: {},
@@ -49,7 +49,7 @@ test("adding new route", () => {
   });
 });
 
-test("adding new operation object", () => {
+Deno.test(function adding_new_operation_object() {
   const source = {
     openapi: "1.0.0",
     paths: {

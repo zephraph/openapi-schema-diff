@@ -1,7 +1,7 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 const compareOpenApiSchemas = require("../index.js");
 
-test("adding response header schema property", () => {
+Deno.test(function adding_response_header_schema_property() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -66,7 +66,7 @@ test("adding response header schema property", () => {
   });
 });
 
-test("removing response header schema property", () => {
+Deno.test(function removing_response_header_schema_property() {
   const source = {
     openapi: "1.0.0",
     paths: {
@@ -131,7 +131,7 @@ test("removing response header schema property", () => {
   });
 });
 
-test("changing response header schema property", () => {
+Deno.test(function changing_response_header_schema_property() {
   const source = {
     openapi: "1.0.0",
     paths: {
