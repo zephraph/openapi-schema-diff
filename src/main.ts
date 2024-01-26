@@ -30,7 +30,7 @@ type JSONValue = string | number | boolean | JSONObject | Array<JSONValue>;
 
 function recurseJsonTransform(
   value: JSONValue,
-  fn: (jv: JSONValue) => JSONValue
+  fn: (jv: JSONValue) => JSONValue,
 ): JSONValue {
   const jv = fn(value);
   if (
@@ -53,12 +53,10 @@ function isReferenceObject(object: unknown): object is ReferenceObject {
   return typeof object === "object" && object !== null && "$ref" in object;
 }
 
-const recurseRef =
-  (schema: JSONObject) =>
-  (jv: JSONValue): JSONValue =>
-    jv && typeof jv === "object" && !Array.isArray(jv)
-      ? resolveRef(jv, schema)
-      : jv;
+const recurseRef = (schema: JSONObject) => (jv: JSONValue): JSONValue =>
+  jv && typeof jv === "object" && !Array.isArray(jv)
+    ? resolveRef(jv, schema)
+    : jv;
 
 export function resolveRefDeep(jv: JSONValue, schema: JSONObject) {
   return recurseJsonTransform(jv, recurseRef(schema));
@@ -66,7 +64,7 @@ export function resolveRefDeep(jv: JSONValue, schema: JSONObject) {
 
 export function resolveRef<T extends JSONValue>(
   maybeRef: T | ReferenceObject,
-  schema: JSONObject
+  schema: JSONObject,
 ): T {
   if (isReferenceObject(maybeRef)) {
     const path = maybeRef.$ref.replace(/^#\//, "").split("/");
@@ -83,10 +81,10 @@ export function resolveRef<T extends JSONValue>(
 
 const resolveMapRef = (
   maybeRef: Record<string, JSONValue>,
-  schema: OpenAPISchema
+  schema: OpenAPISchema,
 ) =>
   Object.fromEntries(
-    Object.entries(maybeRef).map(([k, v]) => [k, resolveRefDeep(v, schema)])
+    Object.entries(maybeRef).map(([k, v]) => [k, resolveRefDeep(v, schema)]),
   );
 
 interface JsonSchemaChanges {
@@ -101,7 +99,7 @@ function compareJsonSchemas(
   targetSchema: Object,
   jsonPath: string,
   derefJsonPath: string,
-  changes?: JsonSchemaChanges[]
+  changes?: JsonSchemaChanges[],
 ) {
   changes ??= [];
   if (!sourceSchema && !targetSchema) {
@@ -115,7 +113,7 @@ function compareJsonSchemas(
 
   const { sameKeys, addedKeys, removedKeys } = compareObjectKeys(
     sourceSchema,
-    targetSchema
+    targetSchema,
   );
 
   for (const key of addedKeys) {
@@ -147,8 +145,9 @@ function compareJsonSchemas(
       targetValue !== null
     ) {
       const newJsonPath = key === "$ref" ? jsonPath : jsonPath + `/${key}`;
-      const newDerefJsonPath =
-        key === "$ref" ? derefJsonPath : derefJsonPath + `/${key}`;
+      const newDerefJsonPath = key === "$ref"
+        ? derefJsonPath
+        : derefJsonPath + `/${key}`;
 
       const keyChanges = compareJsonSchemas(
         ctx,
@@ -156,7 +155,7 @@ function compareJsonSchemas(
         targetValue as Object,
         newJsonPath,
         newDerefJsonPath,
-        changes
+        changes,
       );
       changes.push(...keyChanges);
     } else {
@@ -173,11 +172,11 @@ function compareJsonSchemas(
 
 function checkSchemaVersions(
   sourceSchemaVersion: string,
-  targetSchemaVersion: string
+  targetSchemaVersion: string,
 ) {
   if (sourceSchemaVersion.split(".")[0] !== targetSchemaVersion.split(".")[0]) {
     throw new Error(
-      "source and target schemas must have the same major version"
+      "source and target schemas must have the same major version",
     );
   }
 }
@@ -187,7 +186,7 @@ function compareParametersObjects(
   path: string,
   method: Method,
   sourceParameterObjects?: ParameterObject[],
-  targetParameterObjects?: ParameterObject[]
+  targetParameterObjects?: ParameterObject[],
 ) {
   const changes: ParameterObjectChanges[] = [];
 
@@ -201,7 +200,7 @@ function compareParametersObjects(
     const sourceParameterObject = sourceParameterObjects.find(
       (parameterObject) =>
         parameterObject.name === targetParameterName &&
-        parameterObject.in === targetParameterIn
+        parameterObject.in === targetParameterIn,
     );
 
     if (sourceParameterObject === undefined) {
@@ -212,8 +211,7 @@ function compareParametersObjects(
         in: targetParameterIn,
         sourceSchema: undefined,
         targetSchema: targetParameterObject,
-        comment:
-          `${targetParameterIn} parameter "${targetParameterName}"` +
+        comment: `${targetParameterIn} parameter "${targetParameterName}"` +
           ` has been added to ${method.toUpperCase()} "${path}" route`,
       });
       continue;
@@ -226,7 +224,7 @@ function compareParametersObjects(
       sourceParameterObject.schema,
       targetParameterObject.schema,
       `#/paths${path}/${method}/parameters/${targetParameterName}`,
-      "#"
+      "#",
     );
 
     if (parametersSchemaChanges.length > 0) {
@@ -255,8 +253,7 @@ function compareParametersObjects(
         sourceSchema: sourceParameterObject,
         targetSchema: targetParameterObject,
         changes: paramChanges,
-        comment:
-          `${targetParameterIn} parameter "${targetParameterName}"` +
+        comment: `${targetParameterIn} parameter "${targetParameterName}"` +
           ` has been changed in ${method.toUpperCase()} "${path}" route`,
       });
     }
@@ -269,7 +266,7 @@ function compareParametersObjects(
     const targetParameterObject = targetParameterObjects.find(
       (parameterObject) =>
         parameterObject.name === sourceParameterName &&
-        parameterObject.in === sourceParameterIn
+        parameterObject.in === sourceParameterIn,
     );
 
     if (targetParameterObject === undefined) {
@@ -280,8 +277,7 @@ function compareParametersObjects(
         in: sourceParameterIn,
         sourceSchema: sourceParameterObject,
         targetSchema: undefined,
-        comment:
-          `${sourceParameterIn} parameter "${sourceParameterName}"` +
+        comment: `${sourceParameterIn} parameter "${sourceParameterName}"` +
           ` has been deleted from ${method.toUpperCase()} "${path}" route`,
       });
       continue;
@@ -296,7 +292,7 @@ function compareRequestBodyObjects(
   path: string,
   method: Method,
   sourceRequestBodyObject?: RequestBodyObject,
-  targetRequestBodyObject?: RequestBodyObject
+  targetRequestBodyObject?: RequestBodyObject,
 ) {
   const changes: RequestBodyObjectChanges[] = [];
 
@@ -305,7 +301,7 @@ function compareRequestBodyObjects(
 
   const { sameKeys, addedKeys, removedKeys } = compareObjectKeys(
     sourceRequestBodyContent,
-    targetRequestBodyContent
+    targetRequestBodyContent,
   );
 
   for (const mediaType of addedKeys) {
@@ -316,8 +312,7 @@ function compareRequestBodyObjects(
       mediaType,
       sourceSchema: undefined,
       targetSchema: requestBodyObject,
-      comment:
-        `request body for "${mediaType}" media type` +
+      comment: `request body for "${mediaType}" media type` +
         ` has been added to ${method.toUpperCase()} "${path}" route`,
     });
   }
@@ -330,8 +325,7 @@ function compareRequestBodyObjects(
       mediaType,
       sourceSchema: requestBodyObject,
       targetSchema: undefined,
-      comment:
-        `request body for "${mediaType}" media type` +
+      comment: `request body for "${mediaType}" media type` +
         ` has been deleted from ${method.toUpperCase()} "${path}" route`,
     });
   }
@@ -347,7 +341,7 @@ function compareRequestBodyObjects(
       sourceMediaType.schema,
       targetMediaType.schema,
       `#/paths${path}/${method}/requestBody/content/${mediaType}`,
-      "#"
+      "#",
     );
 
     if (requestBodySchemaChanges.length > 0) {
@@ -378,8 +372,7 @@ function compareRequestBodyObjects(
         sourceSchema: sourceMediaType,
         targetSchema: targetMediaType,
         changes: requestBodyChanges,
-        comment:
-          `request body for "${mediaType}" media type` +
+        comment: `request body for "${mediaType}" media type` +
           ` has been changed in ${method.toUpperCase()} "${path}" route`,
       });
     }
@@ -393,7 +386,7 @@ function compareResponseObjects(
   path: string,
   method: Method,
   sourceResponseObjects: Record<string, ResponseObject>,
-  targetResponseObjects: Record<string, ResponseObject>
+  targetResponseObjects: Record<string, ResponseObject>,
 ) {
   const changes: ResponseObjectChanges[] = [];
 
@@ -417,8 +410,7 @@ function compareResponseObjects(
           header,
           sourceSchema: undefined,
           targetSchema: targetHeaderObject,
-          comment:
-            `response header for "${statusCode}" status code` +
+          comment: `response header for "${statusCode}" status code` +
             ` has been added to ${method.toUpperCase()} "${path}" route`,
         });
         continue;
@@ -431,7 +423,7 @@ function compareResponseObjects(
         resolveRef(sourceHeaderObject, ctx.sourceSchema).schema,
         resolveRef(targetHeaderObject, ctx.targetSchema).schema,
         `#/paths${path}/${method}/responses/${statusCode}/headers/${header}`,
-        "#"
+        "#",
       );
 
       if (headerObjectSchemaChanges.length > 0) {
@@ -451,8 +443,7 @@ function compareResponseObjects(
           sourceSchema: sourceHeaderObject,
           targetSchema: targetHeaderObject,
           changes: headerObjectChanges,
-          comment:
-            `response header for "${statusCode}" status code` +
+          comment: `response header for "${statusCode}" status code` +
             ` has been changed in ${method.toUpperCase()} "${path}" route`,
         });
       }
@@ -484,7 +475,7 @@ function compareResponseObjects(
         sourceMediaTypeObject.schema,
         targetMediaTypeObject.schema,
         `#/paths${path}/${method}/responses/${statusCode}/content/${mediaType}`,
-        "#"
+        "#",
       );
 
       if (mediaTypeSchemaChanges.length > 0) {
@@ -528,8 +519,7 @@ function compareResponseObjects(
           header,
           sourceSchema: sourceHeaderObject,
           targetSchema: undefined,
-          comment:
-            `response header for "${statusCode}" status code` +
+          comment: `response header for "${statusCode}" status code` +
             ` has been deleted from ${method.toUpperCase()} "${path}" route`,
         });
         continue;
@@ -565,7 +555,7 @@ function compareOperationObjects(
   path: string,
   method: Method,
   sourceOperationObject?: OperationObject,
-  targetOperationObject?: OperationObject
+  targetOperationObject?: OperationObject,
 ) {
   const parameterObjectsChanges = compareParametersObjects(
     ctx,
@@ -576,7 +566,7 @@ function compareOperationObjects(
     ),
     targetOperationObject?.parameters?.map((p) =>
       resolveRef(p, ctx.targetSchema)
-    )
+    ),
   );
 
   const requestBodyObjectsChanges = compareRequestBodyObjects(
@@ -584,7 +574,7 @@ function compareOperationObjects(
     path,
     method,
     sourceOperationObject?.requestBody,
-    targetOperationObject?.requestBody
+    targetOperationObject?.requestBody,
   );
 
   const responseObjectsChanges = compareResponseObjects(
@@ -593,12 +583,12 @@ function compareOperationObjects(
     method,
     resolveMapRef(
       sourceOperationObject?.responses || {},
-      ctx.sourceSchema
+      ctx.sourceSchema,
     ) as Record<string, ResponseObject>,
     resolveMapRef(
       targetOperationObject?.responses || {},
-      ctx.targetSchema
-    ) as Record<string, ResponseObject>
+      ctx.targetSchema,
+    ) as Record<string, ResponseObject>,
   );
 
   if (
@@ -632,11 +622,11 @@ function comparePathObjects(
   ctx: Ctx,
   path: string,
   sourcePathObject: PathItemObject,
-  targetPathObject: PathItemObject
+  targetPathObject: PathItemObject,
 ) {
   const { sameKeys, addedKeys, removedKeys } = compareObjectKeys(
     sourcePathObject,
-    targetPathObject
+    targetPathObject,
   );
 
   for (const method of addedKeys as Method[]) {
@@ -670,7 +660,7 @@ function comparePathObjects(
       path,
       method,
       sourceOperationObject,
-      targetOperationObject
+      targetOperationObject,
     );
   }
 }
@@ -678,11 +668,11 @@ function comparePathObjects(
 function comparePathsObjects(
   ctx: Ctx,
   sourcePathsObjects: OpenAPISchema["paths"],
-  targetPathsObjects: OpenAPISchema["paths"]
+  targetPathsObjects: OpenAPISchema["paths"],
 ) {
   const { sameKeys, addedKeys, removedKeys } = compareObjectKeys(
     sourcePathsObjects,
-    targetPathsObjects
+    targetPathsObjects,
   );
 
   for (const path of addedKeys) {
@@ -720,94 +710,94 @@ function comparePathsObjects(
 
 type ParameterKeywordChanges =
   | {
-      keyword: "schema";
-      changes: JsonSchemaChanges[];
-      comment: string;
-    }
+    keyword: "schema";
+    changes: JsonSchemaChanges[];
+    comment: string;
+  }
   | {
-      keyword: "required";
-      source: boolean | undefined;
-      target: boolean | undefined;
-      comment: string;
-    };
+    keyword: "required";
+    source: boolean | undefined;
+    target: boolean | undefined;
+    comment: string;
+  };
 type ParameterObjectChanges =
   | {
-      type: "parameter";
-      action: "added";
-      name: string;
-      in: ParameterObject["in"];
-      sourceSchema: undefined;
-      targetSchema: ParameterObject;
-      comment: string;
-    }
+    type: "parameter";
+    action: "added";
+    name: string;
+    in: ParameterObject["in"];
+    sourceSchema: undefined;
+    targetSchema: ParameterObject;
+    comment: string;
+  }
   | {
-      type: "parameter";
-      action: "added";
-      name: string;
-      in: ParameterObject["in"];
-      sourceSchema: undefined;
-      targetSchema: ParameterObject;
-      comment: string;
-    }
+    type: "parameter";
+    action: "added";
+    name: string;
+    in: ParameterObject["in"];
+    sourceSchema: undefined;
+    targetSchema: ParameterObject;
+    comment: string;
+  }
   | {
-      type: "parameter";
-      action: "changed";
-      name: string;
-      in: ParameterObject["in"];
-      sourceSchema: ParameterObject;
-      targetSchema: ParameterObject;
-      changes: ParameterKeywordChanges[];
-      comment: string;
-    }
+    type: "parameter";
+    action: "changed";
+    name: string;
+    in: ParameterObject["in"];
+    sourceSchema: ParameterObject;
+    targetSchema: ParameterObject;
+    changes: ParameterKeywordChanges[];
+    comment: string;
+  }
   | {
-      type: "parameter";
-      action: "deleted";
-      name: string;
-      in: ParameterObject["in"];
-      sourceSchema: ParameterObject;
-      targetSchema: undefined;
-      comment: string;
-    };
+    type: "parameter";
+    action: "deleted";
+    name: string;
+    in: ParameterObject["in"];
+    sourceSchema: ParameterObject;
+    targetSchema: undefined;
+    comment: string;
+  };
 
 type RequestBodyKeywordChanges =
   | {
-      keyword: "schema";
-      changes: JsonSchemaChanges[];
-      comment: string;
-    }
+    keyword: "schema";
+    changes: JsonSchemaChanges[];
+    comment: string;
+  }
   | {
-      keyword: "required";
-      source?: boolean;
-      target?: boolean;
-      comment: string;
-    };
+    keyword: "required";
+    source?: boolean;
+    target?: boolean;
+    comment: string;
+  };
 
 type RequestBodyObjectChanges =
   | {
-      type: "requestBody";
-      action: "added";
-      mediaType: string;
-      sourceSchema: undefined;
-      targetSchema: MediaTypeObject;
-      comment: string;
-    }
+    type: "requestBody";
+    action: "added";
+    mediaType: string;
+    sourceSchema: undefined;
+    targetSchema: MediaTypeObject;
+    comment: string;
+  }
   | {
-      type: "requestBody";
-      action: "changed";
-      mediaType: string;
-      sourceSchema: MediaTypeObject;
-      targetSchema: MediaTypeObject;
-      changes: RequestBodyKeywordChanges[];
-      comment: string;
-    }
+    type: "requestBody";
+    action: "changed";
+    mediaType: string;
+    sourceSchema: MediaTypeObject;
+    targetSchema: MediaTypeObject;
+    changes: RequestBodyKeywordChanges[];
+    comment: string;
+  }
   | {
-      type: "requestBody";
-      action: "deleted";
-      mediaType: string;
-      sourceSchema: MediaTypeObject;
-      targetSchema: undefined;
-      comment: string;
-    };
+    type: "requestBody";
+    action: "deleted";
+    mediaType: string;
+    sourceSchema: MediaTypeObject;
+    targetSchema: undefined;
+    comment: string;
+  };
 
 type ResponseHeaders = string | HeaderObject | ReferenceObject;
 type ResponseHeaderKeywordChanges = {
@@ -822,61 +812,61 @@ type ResponseBodyKeywordChanges = {
 };
 type ResponseObjectChanges =
   | {
-      type: "responseHeader";
-      action: "added";
-      statusCode: string;
-      header: string;
-      sourceSchema: undefined;
-      targetSchema: ResponseHeaders;
-      comment: string;
-    }
+    type: "responseHeader";
+    action: "added";
+    statusCode: string;
+    header: string;
+    sourceSchema: undefined;
+    targetSchema: ResponseHeaders;
+    comment: string;
+  }
   | {
-      type: "responseHeader";
-      action: "changed";
-      statusCode: string;
-      header: string;
-      sourceSchema: ResponseHeaders;
-      targetSchema: ResponseHeaders;
-      changes: ResponseHeaderKeywordChanges[];
-      comment: string;
-    }
+    type: "responseHeader";
+    action: "changed";
+    statusCode: string;
+    header: string;
+    sourceSchema: ResponseHeaders;
+    targetSchema: ResponseHeaders;
+    changes: ResponseHeaderKeywordChanges[];
+    comment: string;
+  }
   | {
-      type: "responseHeader";
-      action: "deleted";
-      statusCode: string;
-      header: string;
-      sourceSchema: ResponseHeaders;
-      targetSchema: undefined;
-      comment: string;
-    }
+    type: "responseHeader";
+    action: "deleted";
+    statusCode: string;
+    header: string;
+    sourceSchema: ResponseHeaders;
+    targetSchema: undefined;
+    comment: string;
+  }
   | {
-      type: "responseBody";
-      action: "added";
-      statusCode: string;
-      mediaType: string;
-      sourceSchema: undefined;
-      targetSchema: MediaTypeObject;
-      comment: string;
-    }
+    type: "responseBody";
+    action: "added";
+    statusCode: string;
+    mediaType: string;
+    sourceSchema: undefined;
+    targetSchema: MediaTypeObject;
+    comment: string;
+  }
   | {
-      type: "responseBody";
-      action: "changed";
-      statusCode: string;
-      mediaType: string;
-      sourceSchema: MediaTypeObject;
-      targetSchema: MediaTypeObject;
-      changes: ResponseBodyKeywordChanges[];
-      comment: string;
-    }
+    type: "responseBody";
+    action: "changed";
+    statusCode: string;
+    mediaType: string;
+    sourceSchema: MediaTypeObject;
+    targetSchema: MediaTypeObject;
+    changes: ResponseBodyKeywordChanges[];
+    comment: string;
+  }
   | {
-      type: "responseBody";
-      action: "deleted";
-      statusCode: string;
-      mediaType: string;
-      sourceSchema: MediaTypeObject;
-      targetSchema: undefined;
-      comment: string;
-    };
+    type: "responseBody";
+    action: "deleted";
+    statusCode: string;
+    mediaType: string;
+    sourceSchema: MediaTypeObject;
+    targetSchema: undefined;
+    comment: string;
+  };
 
 interface Ctx {
   sourceSchema: OpenAPISchema;
@@ -912,12 +902,14 @@ interface Ctx {
 export type SchemaDiff = ReturnType<typeof compareOpenApiSchemas>;
 export function compareOpenApiSchemas(
   sourceSchema: string | object,
-  targetSchema: string | object
+  targetSchema: string | object,
 ) {
-  sourceSchema =
-    typeof sourceSchema === "string" ? JSON.parse(sourceSchema) : sourceSchema;
-  targetSchema =
-    typeof targetSchema === "string" ? JSON.parse(targetSchema) : targetSchema;
+  sourceSchema = typeof sourceSchema === "string"
+    ? JSON.parse(sourceSchema)
+    : sourceSchema;
+  targetSchema = typeof targetSchema === "string"
+    ? JSON.parse(targetSchema)
+    : targetSchema;
 
   const sourceParsedSchema = OpenAPISchema.passthrough().parse(sourceSchema);
   const targetParsedSchema = OpenAPISchema.passthrough().parse(targetSchema);
@@ -938,16 +930,15 @@ export function compareOpenApiSchemas(
     ctx,
     resolveRefDeep(
       sourceParsedSchema.paths,
-      sourceParsedSchema as JSONObject
+      sourceParsedSchema as JSONObject,
     ) as Record<string, PathItemObject>,
     resolveRefDeep(
       targetParsedSchema.paths,
-      targetParsedSchema as JSONObject
-    ) as Record<string, PathItemObject>
+      targetParsedSchema as JSONObject,
+    ) as Record<string, PathItemObject>,
   );
 
-  const isEqual =
-    ctx.addedOperations.length === 0 &&
+  const isEqual = ctx.addedOperations.length === 0 &&
     ctx.deletedOperations.length === 0 &&
     ctx.changedOperations.length === 0;
 

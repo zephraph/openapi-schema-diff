@@ -1,6 +1,6 @@
 import $ from "https://deno.land/x/dax@0.37.1/mod.ts";
 import { compareOpenApiSchemas } from "../src/main.ts";
-import { Result, Option } from "../src/utils.ts";
+import { Option, Result } from "../src/utils.ts";
 import { match, P } from "npm:ts-pattern";
 import { SchemaDiff } from "../src/main.ts";
 import { outdent } from "https://deno.land/x/outdent@v0.8.0/mod.ts";
@@ -15,7 +15,7 @@ const relativeFilePath = relative(repoDir, schemaFile);
 const calculatePadding = (strings: string[]) => {
   const longestLength = strings.reduce(
     (acc, s) => (s.length > acc ? s.length : acc),
-    0
+    0,
   );
   return longestLength + 1;
 };
@@ -24,7 +24,7 @@ const getFileHistory = (file: string) =>
   Result.fromPromise(
     $`git log --oneline --pretty='format:%H||%ct||%s' --follow -- ${file}`
       .cwd(repoDir)
-      .lines()
+      .lines(),
   );
 
 const checkIfFileChangedInCommit = (file: string, commit: string) =>
@@ -60,26 +60,21 @@ const commits: Commit[] = commitLog.map((commit) => {
 });
 
 const printDiff = (commit: Commit, diff: SchemaDiff) => {
-  const totalRoutes =
-    diff.sameRoutes.length +
+  const totalRoutes = diff.sameRoutes.length +
     diff.addedRoutes.length +
     diff.changedRoutes.length;
 
   console.log(
     outdent.string(`
 
-    ## ${new Date(parseInt(commit.date) * 1000).toISOString().split("T")[0]} ${
-      commit.message
-    } [(#${commit.pr})](https://github.com/oxidecomputer/omicron/pull/${
-      commit.pr
-    })
+    ## ${
+      new Date(parseInt(commit.date) * 1000).toISOString().split("T")[0]
+    } ${commit.message} [(#${commit.pr})](https://github.com/oxidecomputer/omicron/pull/${commit.pr})
 
     _commit hash: ${commit.hash}_
 
-    ${totalRoutes} total, ${diff.addedRoutes.length} added, ${
-      diff.deletedRoutes.length
-    } removed, ${diff.changedRoutes.length} changed\n
-  `)
+    ${totalRoutes} total, ${diff.addedRoutes.length} added, ${diff.deletedRoutes.length} removed, ${diff.changedRoutes.length} changed\n
+  `),
   );
 
   if (diff.addedRoutes.length > 0) {
@@ -89,7 +84,7 @@ const printDiff = (commit: Commit, diff: SchemaDiff) => {
     console.log(
       diff.addedRoutes
         .map((r) => `- ${r.method.toUpperCase().padEnd(padding)} ${r.path}`)
-        .join("\n")
+        .join("\n"),
     );
   }
 
@@ -100,7 +95,7 @@ const printDiff = (commit: Commit, diff: SchemaDiff) => {
     console.log(
       diff.deletedRoutes
         .map((r) => `- ${r.method.toUpperCase().padEnd(padding)} ${r.path}`)
-        .join("\n")
+        .join("\n"),
     );
   }
 
@@ -111,7 +106,7 @@ const printDiff = (commit: Commit, diff: SchemaDiff) => {
     console.log(
       diff.changedRoutes
         .map((r) => `- ${r.method.toUpperCase().padEnd(padding)}\t ${r.path}`)
-        .join("\n")
+        .join("\n"),
     );
   }
 };
@@ -122,7 +117,7 @@ let previousCommit = null;
 for (const commit of commits) {
   const fileChanged = await checkIfFileChangedInCommit(
     relativeFilePath,
-    commit.hash
+    commit.hash,
   );
 
   if (!fileChanged) {

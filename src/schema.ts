@@ -133,8 +133,8 @@ export type ParameterObject = z.infer<typeof baseParameterObject> & {
   in: "query" | "header" | "path" | "cookie";
 };
 
-export const ParameterObject: z.ZodType<ParameterObject> =
-  baseParameterObject.extend({
+export const ParameterObject: z.ZodType<ParameterObject> = baseParameterObject
+  .extend({
     name: z.string(),
     in: z.enum(["query", "header", "path", "cookie"]),
   });

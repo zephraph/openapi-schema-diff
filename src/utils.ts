@@ -30,7 +30,7 @@ export class Result<T extends "ok" | "error", D, E extends Error> {
   private constructor(
     public readonly type: T,
     public readonly data: T extends "ok" ? D : never = Never,
-    public readonly error: T extends "error" ? E : never = Never
+    public readonly error: T extends "error" ? E : never = Never,
   ) {}
 
   static ok<T>(value: T): Result<"ok", T, never> {
@@ -97,7 +97,7 @@ export class Result<T extends "ok" | "error", D, E extends Error> {
 export class Option<T extends "some" | "none", V> {
   private constructor(
     public readonly type: T,
-    public readonly value: T extends "some" ? V : never = Never
+    public readonly value: T extends "some" ? V : never = Never,
   ) {}
 
   static some<T>(value: T): Option<"some", T> {

@@ -43,7 +43,7 @@ Deno.test(function resolveRefShallowTest() {
   // Should replace a shallow ref
   assertEquals(
     simpleRef.bar,
-    resolveRef<typeof simpleRef.bar>(simpleRef.foo, simpleRef)
+    resolveRef<typeof simpleRef.bar>(simpleRef.foo, simpleRef),
   );
   // Shouldn't affect a non-ref
   assertEquals(simpleRef.bar, resolveRef(simpleRef.bar, simpleRef));
