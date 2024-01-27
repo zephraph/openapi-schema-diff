@@ -151,7 +151,7 @@ export const RequestBodyObject = z.object({
 
 export type ResponseObject = z.infer<typeof ResponseObject>;
 export const ResponseObject = z.object({
-  description: z.string(),
+  description: z.string().optional(),
   headers: z.record(z.union([HeaderObject, ReferenceObject])).optional(),
   content: z.record(MediaTypeObject).optional(),
   links: z.record(z.any()).optional(),
