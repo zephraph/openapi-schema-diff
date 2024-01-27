@@ -1,5 +1,8 @@
-import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
-const compareOpenApiSchemas = require("../index.js");
+import {
+  assertStrictEquals,
+  fail,
+} from "https://deno.land/std@0.209.0/assert/mod.ts";
+import { compareOpenApiSchemas } from "../src/main.ts";
 
 Deno.test(function should_throw_source_schema_version_is_missing() {
   const source = { paths: {} };
@@ -7,9 +10,9 @@ Deno.test(function should_throw_source_schema_version_is_missing() {
 
   try {
     compareOpenApiSchemas(source, target);
-    assert.fail("should throw");
+    fail("should throw");
   } catch (err) {
-    assert.strictEqual(err.message, "source schema version must be a string");
+    assertStrictEquals(err.message, "source schema version must be a string");
   }
 });
 
@@ -19,9 +22,9 @@ Deno.test(function should_throw_target_schema_version_is_missing() {
 
   try {
     compareOpenApiSchemas(source, target);
-    assert.fail("should throw");
+    fail("should throw");
   } catch (err) {
-    assert.strictEqual(err.message, "target schema version must be a string");
+    assertStrictEquals(err.message, "target schema version must be a string");
   }
 });
 
@@ -31,9 +34,9 @@ Deno.test(function should_throw_if_major_version_does_not_equal() {
 
   try {
     compareOpenApiSchemas(source, target);
-    assert.fail("should throw");
+    fail("should throw");
   } catch (err) {
-    assert.strictEqual(
+    assertStrictEquals(
       err.message,
       "source and target schemas must have the same major version",
     );
@@ -45,7 +48,7 @@ Deno.test(function should_not_throw_if_minor_version_does_not_equal() {
   const target = { openapi: "1.0.0", paths: {} };
 
   const { isEqual } = compareOpenApiSchemas(source, target);
-  assert.strictEqual(isEqual, true);
+  assertStrictEquals(isEqual, true);
 });
 
 Deno.test(function should_not_throw_if_path_version_does_not_equal() {
@@ -53,5 +56,5 @@ Deno.test(function should_not_throw_if_path_version_does_not_equal() {
   const target = { openapi: "1.1.0", paths: {} };
 
   const { isEqual } = compareOpenApiSchemas(source, target);
-  assert.strictEqual(isEqual, true);
+  assertStrictEquals(isEqual, true);
 });

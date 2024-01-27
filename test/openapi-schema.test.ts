@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
-const compareOpenApiSchemas = require("../index.js");
+import { compareOpenApiSchemas } from "../src/main.ts";
 
 Deno.test(function should_throw_if_source_schema_is_not_an_object() {
   const source = 3;
@@ -7,9 +7,9 @@ Deno.test(function should_throw_if_source_schema_is_not_an_object() {
 
   try {
     compareOpenApiSchemas(source, target);
-    assert.fail("should throw");
+    fail("should throw");
   } catch (err) {
-    assert.strictEqual(err.message, "source schema must be an object");
+    assertStrictEquals(err.message, "source schema must be an object");
   }
 });
 
@@ -19,9 +19,9 @@ Deno.test(function should_throw_if_target_schema_is_not_an_object() {
 
   try {
     compareOpenApiSchemas(source, target);
-    assert.fail("should throw");
+    fail("should throw");
   } catch (err) {
-    assert.strictEqual(err.message, "target schema must be an object");
+    assertStrictEquals(err.message, "target schema must be an object");
   }
 });
 
@@ -31,9 +31,9 @@ Deno.test(function should_throw_if_source_schema_is_null() {
 
   try {
     compareOpenApiSchemas(source, target);
-    assert.fail("should throw");
+    fail("should throw");
   } catch (err) {
-    assert.strictEqual(err.message, "source schema must be an object");
+    assertStrictEquals(err.message, "source schema must be an object");
   }
 });
 
@@ -43,8 +43,8 @@ Deno.test(function should_throw_if_target_schema_is_null() {
 
   try {
     compareOpenApiSchemas(source, target);
-    assert.fail("should throw");
+    fail("should throw");
   } catch (err) {
-    assert.strictEqual(err.message, "target schema must be an object");
+    assertStrictEquals(err.message, "target schema must be an object");
   }
 });

@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
-const compareOpenApiSchemas = require("../index.js");
+import { compareOpenApiSchemas } from "../src/main.ts";
 
 Deno.test(function modifying_routes_schema_through_ref() {
   const source = {
@@ -69,7 +69,7 @@ Deno.test(function modifying_routes_schema_through_ref() {
   };
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
     addedRoutes: [],
@@ -182,7 +182,7 @@ Deno.test(function different__ref_property_values() {
   };
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
     addedRoutes: [],
@@ -267,7 +267,7 @@ Deno.test(function compare_two_equal_schemas_with_circular_refs() {
   const target = JSON.parse(JSON.stringify(source));
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: true,
     sameRoutes: [
       {
@@ -357,7 +357,7 @@ Deno.test(function compare_two_different_schemas_with_circular_refs() {
   };
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
     addedRoutes: [],
@@ -453,7 +453,7 @@ Deno.test(function compare_two_equal_schemas_with_cross_circular_refs() {
   const target = JSON.parse(JSON.stringify(source));
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: true,
     sameRoutes: [
       {
@@ -565,7 +565,7 @@ Deno.test(function compare_two_different_schemas_with_cross_circular_refs() {
   };
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
     addedRoutes: [],

@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
-const compareOpenApiSchemas = require("../index.js");
+import { compareOpenApiSchemas } from "../src/main.ts";
 
 Deno.test(function should_not_count_summery_and_description_properties() {
   const source = {
@@ -85,7 +85,7 @@ Deno.test(function should_not_count_summery_and_description_properties() {
   };
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: true,
     sameRoutes: [
       {
@@ -175,7 +175,7 @@ Deno.test(function should_not_count_summery_and_description_properties() {
   };
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: false,
     sameRoutes: [
       {

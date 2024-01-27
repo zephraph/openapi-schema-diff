@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
-const compareOpenApiSchemas = require("../index.js");
+import { compareOpenApiSchemas } from "../src/main.ts";
 
 Deno.test(function adding_request_body_schema_property_value() {
   const source = {
@@ -36,7 +36,7 @@ Deno.test(function adding_request_body_schema_property_value() {
   };
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
     addedRoutes: [],
@@ -114,7 +114,7 @@ Deno.test(function changing_request_body_schema_property_value() {
   };
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
     addedRoutes: [],
@@ -191,7 +191,7 @@ Deno.test(function removing_request_body_schema_property_value() {
   };
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
     addedRoutes: [],
@@ -262,7 +262,7 @@ Deno.test(
     };
 
     const diff = compareOpenApiSchemas(source, target);
-    assert.deepStrictEqual(diff, {
+    assertEquals(diff, {
       isEqual: false,
       sameRoutes: [],
       addedRoutes: [],
@@ -278,10 +278,12 @@ Deno.test(
               type: "requestBody",
               mediaType: "application/json",
               action: "changed",
-              sourceSchema: source.paths["/foo"].get.requestBody
-                .content["application/json"],
-              targetSchema: target.paths["/foo"].get.requestBody
-                .content["application/json"],
+              sourceSchema: source.paths["/foo"].get.requestBody.content[
+                "application/json"
+              ],
+              targetSchema: target.paths["/foo"].get.requestBody.content[
+                "application/json"
+              ],
               changes: [
                 {
                   keyword: "required",
@@ -343,7 +345,7 @@ Deno.test(
     };
 
     const diff = compareOpenApiSchemas(source, target);
-    assert.deepStrictEqual(diff, {
+    assertEquals(diff, {
       isEqual: true,
       sameRoutes: [
         {

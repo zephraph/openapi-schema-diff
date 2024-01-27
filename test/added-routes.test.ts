@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
-const compareOpenApiSchemas = require("../index.js");
+import { compareOpenApiSchemas } from "../src/main.ts";
 
 Deno.test(function adding_new_route() {
   const source = {
@@ -34,7 +34,7 @@ Deno.test(function adding_new_route() {
   };
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
     addedRoutes: [
@@ -87,7 +87,7 @@ Deno.test(function adding_new_operation_object() {
   };
 
   const diff = compareOpenApiSchemas(source, target);
-  assert.deepStrictEqual(diff, {
+  assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
     addedRoutes: [
