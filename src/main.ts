@@ -12,7 +12,6 @@ import {
   RequestBodyObject,
   ResponseObject,
 } from "./schema.ts";
-import { P } from "npm:ts-pattern";
 
 const HTTP_METHODS: Method[] = [
   "get",
