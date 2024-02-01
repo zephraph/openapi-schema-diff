@@ -1,3 +1,4 @@
+#! /usr/bin/env deno run --allow-env --allow-read --allow-run=/usr/bin/git
 import $ from "https://deno.land/x/dax@0.37.1/mod.ts";
 import { compareOpenApiSchemas } from "../src/main.ts";
 import { Option, Result } from "../src/utils.ts";
