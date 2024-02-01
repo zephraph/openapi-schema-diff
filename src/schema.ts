@@ -98,7 +98,7 @@ export const SchemaObject: z.ZodType<SchemaObject> = baseSchemaObject.extend({
 
 export type MediaTypeObject = z.infer<typeof MediaTypeObject>;
 export const MediaTypeObject = z.object({
-  schema: z.union([SchemaObject, ReferenceObject]),
+  schema: z.union([SchemaObject, ReferenceObject]).optional(),
   example: z.any().optional(),
   examples: z.any().optional(),
   encoding: z.any().optional(),
@@ -189,8 +189,8 @@ export const PathItemObject = z.object({
 });
 
 export const ComponentsObject = z.object({
-  schemas: z.record(z.union([SchemaObject, ReferenceObject])),
-  responses: z.record(z.union([ResponseObject, ReferenceObject])),
+  schemas: z.record(z.union([SchemaObject, ReferenceObject])).optional(),
+  responses: z.record(z.union([ResponseObject, ReferenceObject])).optional(),
   parameters: z.record(z.union([ParameterObject, ReferenceObject])).optional(),
   examples: z.record(z.any()).optional(),
   requestBodies: z
