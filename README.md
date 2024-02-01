@@ -1,6 +1,11 @@
 # openapi-schema-diff
 
-**openapi-schema-diff** is a javascript library that compares two OpenAPI
+This is a fork of [openapi-schema-diff](https://github.com/fastify/openapi-schema-diff) by [
+Ivan Tymoshenko](https://github.com/ivan-tymoshenko) of [Fastify](https://github.com/fastify). It has been modified to be typescript first, adds a Zod schema for the API spec, and uses [Deno](https://deno.land) for development instead of Node.
+
+Note that this was designed for use at [Oxide Computer Company](https://oxide.computer) which currently uses OpenAPI version 3.0.3 for their schema. As such, the types and schema validation are designed for that version of the OpenAPI spec.
+
+**openapi-schema-diff** is a TypeScript library that compares two OpenAPI
 schemas and finds breaking changes.
 
 - [Installation](#installation)
@@ -13,9 +18,7 @@ schemas and finds breaking changes.
 
 ## Installation
 
-```bash
-npm install openapi-schema-diff
-```
+TODO: update
 
 <a name="usage"></a>
 
@@ -121,10 +124,14 @@ assert.deepEqual(differences, {
           statusCode: "200",
           mediaType: "application/json",
           action: "changed",
-          sourceSchema: sourceSchema.paths["/pets"].get.responses["200"]
-            .content["application/json"],
-          targetSchema: targetSchema.paths["/pets"].get.responses["200"]
-            .content["application/json"],
+          sourceSchema:
+            sourceSchema.paths["/pets"].get.responses["200"].content[
+              "application/json"
+            ],
+          targetSchema:
+            targetSchema.paths["/pets"].get.responses["200"].content[
+              "application/json"
+            ],
           changes: [
             {
               keyword: "schema",
