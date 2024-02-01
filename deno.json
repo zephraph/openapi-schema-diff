@@ -1,5 +1,10 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run --watch main.ts",
+    "fmt": "deno fmt",
+    "install-hooks": "deno run --allow-read --allow-write=./.git/hooks/pre-commit -r https://deno.land/x/githooks/githooks.ts"
+  },
+  "githooks": {
+    "pre-commit": "fmt"
   }
 }
