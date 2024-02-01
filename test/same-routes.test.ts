@@ -4,6 +4,10 @@ import { compareOpenApiSchemas } from "../src/main.ts";
 Deno.test(function compare_two_equal_schemas() {
   const source = {
     openapi: "1.0.0",
+    info: {
+      title: "test",
+      version: "1.0.0",
+    },
     paths: {
       "/foo": {
         get: {
@@ -21,10 +25,11 @@ Deno.test(function compare_two_equal_schemas() {
               },
             },
           },
+          responses: {},
         },
       },
     },
-  };
+  } as const;
 
   const target = JSON.parse(JSON.stringify(source));
 

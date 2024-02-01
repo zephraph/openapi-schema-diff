@@ -1,9 +1,15 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 import { compareOpenApiSchemas } from "../src/main.ts";
 
+const info = {
+  title: "test",
+  version: "1.0.0",
+};
+
 Deno.test(function modifying_routes_schema_through_ref() {
   const source = {
     openapi: "1.0.0",
+    info,
     components: {
       schemas: {
         Bar: {
@@ -37,6 +43,7 @@ Deno.test(function modifying_routes_schema_through_ref() {
 
   const target = {
     openapi: "1.0.0",
+    info,
     components: {
       schemas: {
         Bar: {
@@ -117,6 +124,7 @@ Deno.test(function modifying_routes_schema_through_ref() {
 Deno.test(function different__ref_property_values() {
   const source = {
     openapi: "1.0.0",
+    info,
     components: {
       schemas: {
         Bar1: {
@@ -150,6 +158,7 @@ Deno.test(function different__ref_property_values() {
 
   const target = {
     openapi: "1.0.0",
+    info,
     components: {
       schemas: {
         Bar2: {
@@ -230,6 +239,7 @@ Deno.test(function different__ref_property_values() {
 Deno.test(function compare_two_equal_schemas_with_circular_refs() {
   const source = {
     openapi: "1.0.0",
+    info,
     components: {
       schemas: {
         Bar: {
@@ -286,6 +296,7 @@ Deno.test(function compare_two_equal_schemas_with_circular_refs() {
 Deno.test(function compare_two_different_schemas_with_circular_refs() {
   const source = {
     openapi: "1.0.0",
+    info,
     components: {
       schemas: {
         Bar: {
@@ -322,6 +333,7 @@ Deno.test(function compare_two_different_schemas_with_circular_refs() {
 
   const target = {
     openapi: "1.0.0",
+    info,
     components: {
       schemas: {
         Bar: {
@@ -405,6 +417,7 @@ Deno.test(function compare_two_different_schemas_with_circular_refs() {
 Deno.test(function compare_two_equal_schemas_with_cross_circular_refs() {
   const source = {
     openapi: "1.0.0",
+    info,
     components: {
       schemas: {
         Bar1: {
@@ -472,6 +485,7 @@ Deno.test(function compare_two_equal_schemas_with_cross_circular_refs() {
 Deno.test(function compare_two_different_schemas_with_cross_circular_refs() {
   const source = {
     openapi: "1.0.0",
+    info,
     components: {
       schemas: {
         Bar1: {
@@ -519,6 +533,7 @@ Deno.test(function compare_two_different_schemas_with_cross_circular_refs() {
 
   const target = {
     openapi: "1.0.0",
+    info,
     components: {
       schemas: {
         Bar1: {

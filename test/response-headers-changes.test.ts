@@ -1,9 +1,15 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 import { compareOpenApiSchemas } from "../src/main.ts";
 
+const info = {
+  title: "test",
+  version: "1.0.0",
+};
+
 Deno.test(function adding_response_header_schema_property() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -13,10 +19,11 @@ Deno.test(function adding_response_header_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -34,7 +41,7 @@ Deno.test(function adding_response_header_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -69,6 +76,7 @@ Deno.test(function adding_response_header_schema_property() {
 Deno.test(function removing_response_header_schema_property() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -86,10 +94,11 @@ Deno.test(function removing_response_header_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -99,7 +108,7 @@ Deno.test(function removing_response_header_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -134,6 +143,7 @@ Deno.test(function removing_response_header_schema_property() {
 Deno.test(function changing_response_header_schema_property() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -151,10 +161,11 @@ Deno.test(function changing_response_header_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -172,7 +183,7 @@ Deno.test(function changing_response_header_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {

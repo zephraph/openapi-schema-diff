@@ -1,21 +1,31 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 import { compareOpenApiSchemas } from "../src/main.ts";
 
+const info = {
+  title: "test",
+  version: "1.0.0",
+};
+
 Deno.test(function adding_request_body_schema_property_value() {
   const source = {
     openapi: "1.0.0",
-    paths: {
-      "/foo": {
-        get: {},
-      },
-    },
-  };
-
-  const target = {
-    openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
+          responses: {},
+        },
+      },
+    },
+  } as const;
+
+  const target = {
+    openapi: "1.0.0",
+    info,
+    paths: {
+      "/foo": {
+        get: {
+          responses: {},
           requestBody: {
             content: {
               "application/json": {
@@ -33,7 +43,7 @@ Deno.test(function adding_request_body_schema_property_value() {
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -67,9 +77,11 @@ Deno.test(function adding_request_body_schema_property_value() {
 Deno.test(function changing_request_body_schema_property_value() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
+          responses: {},
           requestBody: {
             content: {
               "application/json": {
@@ -87,13 +99,15 @@ Deno.test(function changing_request_body_schema_property_value() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
+          responses: {},
           requestBody: {
             content: {
               "application/json": {
@@ -111,7 +125,7 @@ Deno.test(function changing_request_body_schema_property_value() {
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -159,9 +173,11 @@ Deno.test(function changing_request_body_schema_property_value() {
 Deno.test(function removing_request_body_schema_property_value() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
+          responses: {},
           requestBody: {
             content: {
               "application/json": {
@@ -179,16 +195,19 @@ Deno.test(function removing_request_body_schema_property_value() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
-        get: {},
+        get: {
+          responses: {},
+        },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -223,9 +242,11 @@ Deno.test(
   function making_request_body_required_should_count_as_a_breaking_change() {
     const source = {
       openapi: "1.0.0",
+      info,
       paths: {
         "/foo": {
           get: {
+            responses: {},
             requestBody: {
               content: {
                 "application/json": {
@@ -239,13 +260,15 @@ Deno.test(
           },
         },
       },
-    };
+    } as const;
 
     const target = {
       openapi: "1.0.0",
+      info,
       paths: {
         "/foo": {
           get: {
+            responses: {},
             requestBody: {
               content: {
                 "application/json": {
@@ -259,7 +282,7 @@ Deno.test(
           },
         },
       },
-    };
+    } as const;
 
     const diff = compareOpenApiSchemas(source, target);
     assertEquals(diff, {
@@ -302,62 +325,64 @@ Deno.test(
   },
 );
 
-Deno.test(
-  function making_request_body_optional_should_count_as_a_breaking_change() {
-    const source = {
-      openapi: "1.0.0",
-      paths: {
-        "/foo": {
-          get: {
-            requestBody: {
-              content: {
-                "application/json": {
-                  schema: {
-                    type: "object",
-                  },
-                  required: true,
+Deno.test(function making_request_body_optional_should_count_as_a_change() {
+  const source = {
+    openapi: "1.0.0",
+    info,
+    paths: {
+      "/foo": {
+        get: {
+          responses: {},
+          requestBody: {
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
                 },
+                required: true,
               },
             },
           },
         },
       },
-    };
+    },
+  } as const;
 
-    const target = {
-      openapi: "1.0.0",
-      paths: {
-        "/foo": {
-          get: {
-            requestBody: {
-              content: {
-                "application/json": {
-                  schema: {
-                    type: "object",
-                  },
-                  required: false,
+  const target = {
+    openapi: "1.0.0",
+    info,
+    paths: {
+      "/foo": {
+        get: {
+          responses: {},
+          requestBody: {
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
                 },
+                required: false,
               },
             },
           },
         },
       },
-    };
+    },
+  } as const;
 
-    const diff = compareOpenApiSchemas(source, target);
-    assertEquals(diff, {
-      isEqual: true,
-      sameRoutes: [
-        {
-          method: "get",
-          path: "/foo",
-          sourceSchema: source.paths["/foo"].get,
-          targetSchema: target.paths["/foo"].get,
-        },
-      ],
-      addedRoutes: [],
-      deletedRoutes: [],
-      changedRoutes: [],
-    });
-  },
-);
+  const diff = compareOpenApiSchemas(source, target);
+  assertEquals(diff, {
+    isEqual: true,
+    sameRoutes: [
+      {
+        method: "get",
+        path: "/foo",
+        sourceSchema: source.paths["/foo"].get,
+        targetSchema: target.paths["/foo"].get,
+      },
+    ],
+    addedRoutes: [],
+    deletedRoutes: [],
+    changedRoutes: [],
+  });
+});

@@ -1,33 +1,43 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 import { compareOpenApiSchemas } from "../src/main.ts";
 
+const info = {
+  title: "test",
+  version: "1.0.0",
+};
+
 Deno.test(function removing_a_route() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo1": {
         get: {
           description: "source",
+          responses: {},
         },
       },
       "/foo2": {
         get: {
           description: "source",
+          responses: {},
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo1": {
         get: {
           description: "source",
+          responses: {},
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -55,6 +65,7 @@ Deno.test(function removing_a_route() {
 Deno.test(function removing_an_operation_object() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         description: "source",
@@ -78,16 +89,17 @@ Deno.test(function removing_an_operation_object() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         description: "target",
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {

@@ -1,18 +1,27 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 import { compareOpenApiSchemas } from "../src/main.ts";
 
+const info = {
+  title: "test",
+  version: "1.0.0",
+};
+
 Deno.test(function adding_response_body_schema() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
-        get: {},
+        get: {
+          responses: {},
+        },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -35,7 +44,7 @@ Deno.test(function adding_response_body_schema() {
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -71,6 +80,7 @@ Deno.test(function adding_response_body_schema() {
 Deno.test(function adding_response_body_schema_for_status_code() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -80,10 +90,11 @@ Deno.test(function adding_response_body_schema_for_status_code() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -106,7 +117,7 @@ Deno.test(function adding_response_body_schema_for_status_code() {
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -142,6 +153,7 @@ Deno.test(function adding_response_body_schema_for_status_code() {
 Deno.test(function removing_response_body_schemas() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -164,16 +176,19 @@ Deno.test(function removing_response_body_schemas() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
-        get: {},
+        get: {
+          responses: {},
+        },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -209,6 +224,7 @@ Deno.test(function removing_response_body_schemas() {
 Deno.test(function removing_response_body_schema_for_status_code() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -231,10 +247,11 @@ Deno.test(function removing_response_body_schema_for_status_code() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -244,7 +261,7 @@ Deno.test(function removing_response_body_schema_for_status_code() {
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -280,6 +297,7 @@ Deno.test(function removing_response_body_schema_for_status_code() {
 Deno.test(function adding_response_body_schema_property() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -297,10 +315,11 @@ Deno.test(function adding_response_body_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -323,7 +342,7 @@ Deno.test(function adding_response_body_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -378,6 +397,7 @@ Deno.test(function adding_response_body_schema_property() {
 Deno.test(function removing_schema_property() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -400,10 +420,11 @@ Deno.test(function removing_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -421,7 +442,7 @@ Deno.test(function removing_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -476,6 +497,7 @@ Deno.test(function removing_schema_property() {
 Deno.test(function adding_schema_property() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -498,10 +520,11 @@ Deno.test(function adding_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
@@ -519,7 +542,7 @@ Deno.test(function adding_schema_property() {
         },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {

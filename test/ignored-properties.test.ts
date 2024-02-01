@@ -1,9 +1,15 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 import { compareOpenApiSchemas } from "../src/main.ts";
 
+const info = {
+  title: "test",
+  version: "1.0.0",
+};
+
 Deno.test(function should_not_count_summery_and_description_properties() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         description: "target",
@@ -45,6 +51,7 @@ Deno.test(function should_not_count_summery_and_description_properties() {
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         description: "source",
@@ -116,6 +123,7 @@ Deno.test(function should_not_count_summery_and_description_properties() {
 Deno.test(function should_not_count_summery_and_description_properties() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         description: "target",
@@ -146,6 +154,7 @@ Deno.test(function should_not_count_summery_and_description_properties() {
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         description: "source",

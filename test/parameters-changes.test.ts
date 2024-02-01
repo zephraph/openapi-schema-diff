@@ -1,27 +1,37 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 import { compareOpenApiSchemas } from "../src/main.ts";
 
+const info = {
+  title: "test",
+  version: "1.0.0",
+};
+
 Deno.test(function adding_request_query_schema_property_value() {
   const source = {
     openapi: "1.0.0",
-    paths: {
-      "/foo": {
-        get: {},
-      },
-    },
-  };
-
-  const target = {
-    openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
+          responses: {},
+        },
+      },
+    },
+  } as const;
+
+  const target = {
+    openapi: "1.0.0",
+    info,
+    paths: {
+      "/foo": {
+        get: {
+          responses: {},
           parameters: [
             {
               name: "bar",
-              in: "query",
+              in: "query" as const,
               schema: {
-                type: "string",
+                type: "string" as const,
               },
             },
           ],
@@ -61,15 +71,17 @@ Deno.test(function adding_request_query_schema_property_value() {
 Deno.test(function changing_request_header_schema_property_value() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
+          responses: {},
           parameters: [
             {
               name: "bar",
-              in: "header",
+              in: "header" as const,
               schema: {
-                type: "integer",
+                type: "integer" as const,
               },
             },
           ],
@@ -80,15 +92,17 @@ Deno.test(function changing_request_header_schema_property_value() {
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
+          responses: {},
           parameters: [
             {
               name: "bar",
-              in: "header",
+              in: "header" as const,
               schema: {
-                type: "string",
+                type: "string" as const,
               },
             },
           ],
@@ -142,15 +156,17 @@ Deno.test(function changing_request_header_schema_property_value() {
 Deno.test(function removing_request_path_param_schema_property_value() {
   const source = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
         get: {
+          responses: {},
           parameters: [
             {
               name: "bar",
-              in: "path",
+              in: "path" as const,
               schema: {
-                type: "string",
+                type: "string" as const,
               },
             },
           ],
@@ -161,12 +177,15 @@ Deno.test(function removing_request_path_param_schema_property_value() {
 
   const target = {
     openapi: "1.0.0",
+    info,
     paths: {
       "/foo": {
-        get: {},
+        get: {
+          responses: {},
+        },
       },
     },
-  };
+  } as const;
 
   const diff = compareOpenApiSchemas(source, target);
   assertEquals(diff, {
@@ -201,15 +220,17 @@ Deno.test(
   function making_parameter_required_should_count_as_a_breaking_change() {
     const source = {
       openapi: "1.0.0",
+      info,
       paths: {
         "/foo": {
           get: {
+            responses: {},
             parameters: [
               {
                 name: "bar",
-                in: "header",
+                in: "header" as const,
                 schema: {
-                  type: "integer",
+                  type: "integer" as const,
                 },
               },
             ],
@@ -220,15 +241,17 @@ Deno.test(
 
     const target = {
       openapi: "1.0.0",
+      info,
       paths: {
         "/foo": {
           get: {
+            responses: {},
             parameters: [
               {
                 name: "bar",
-                in: "header",
+                in: "header" as const,
                 schema: {
-                  type: "integer",
+                  type: "integer" as const,
                 },
                 required: true,
               },
@@ -280,15 +303,17 @@ Deno.test(
   function making_parameter_optional_should_not_count_as_a_breaking_change() {
     const source = {
       openapi: "1.0.0",
+      info,
       paths: {
         "/foo": {
           get: {
+            responses: {},
             parameters: [
               {
                 name: "bar",
-                in: "header",
+                in: "header" as const,
                 schema: {
-                  type: "integer",
+                  type: "integer" as const,
                 },
                 required: true,
               },
@@ -300,15 +325,17 @@ Deno.test(
 
     const target = {
       openapi: "1.0.0",
+      info,
       paths: {
         "/foo": {
           get: {
+            responses: {},
             parameters: [
               {
                 name: "bar",
-                in: "header",
+                in: "header" as const,
                 schema: {
-                  type: "integer",
+                  type: "integer" as const,
                 },
                 required: false,
               },
