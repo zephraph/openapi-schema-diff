@@ -337,8 +337,8 @@ function compareRequestBodyObjects(
 
     const requestBodySchemaChanges = compareJsonSchemas(
       ctx,
-      sourceMediaType.schema,
-      targetMediaType.schema,
+      sourceMediaType.schema ?? {},
+      targetMediaType.schema ?? {},
       `#/paths${path}/${method}/requestBody/content/${mediaType}`,
       "#",
     );
@@ -357,9 +357,21 @@ function compareRequestBodyObjects(
     ) {
       requestBodyChanges.push({
         keyword: "required",
-        source: sourceRequestBodyObject?.required,
-        target: targetRequestBodyObject.required,
+        source: false,
+        target: true,
         comment: "request body has been made required",
+      });
+    }
+
+    if (
+      sourceRequestBodyObject?.required &&
+      !targetRequestBodyObject?.required
+    ) {
+      requestBodyChanges.push({
+        keyword: "required",
+        source: true,
+        target: false,
+        comment: "request body has been made optional",
       });
     }
 
@@ -471,8 +483,8 @@ function compareResponseObjects(
 
       const mediaTypeSchemaChanges = compareJsonSchemas(
         ctx,
-        sourceMediaTypeObject.schema,
-        targetMediaTypeObject.schema,
+        sourceMediaTypeObject.schema ?? {},
+        targetMediaTypeObject.schema ?? {},
         `#/paths${path}/${method}/responses/${statusCode}/content/${mediaType}`,
         "#",
       );
