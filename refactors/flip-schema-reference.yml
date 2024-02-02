@@ -1,0 +1,10 @@
+id: flip-schema-reference
+message: ReferenceObjects should come first in a zod union
+language: typescript
+severity: error
+files:
+  - ./src/schema.ts
+rule:
+  pattern: z.union([$TYPE, ReferenceObject])
+fix:
+  z.union([ReferenceObject, $TYPE])

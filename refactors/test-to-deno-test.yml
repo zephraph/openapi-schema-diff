@@ -1,4 +1,4 @@
-id: test-to-deno-test.yaml
+id: test-to-deno-test
 message: rewrite node tests to deno tests
 language: typescript
 severity: error # error, warning, info, hint

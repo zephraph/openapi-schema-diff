@@ -1,5 +1,13 @@
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
+export type JSONObject = { [x: string]: JSONValue };
+export type JSONValue =
+  | string
+  | number
+  | boolean
+  | JSONObject
+  | Array<JSONValue>;
+
 export type Method = z.infer<typeof Method>;
 export const Method = z.enum([
   "get",
@@ -78,18 +86,18 @@ type SchemaObject = z.infer<typeof baseSchemaObject> & {
 
 export const SchemaObject: z.ZodType<SchemaObject> = baseSchemaObject.extend({
   allOf: z
-    .lazy(() => z.array(z.union([SchemaObject, ReferenceObject])))
+    .lazy(() => z.array(z.union([ReferenceObject, SchemaObject])))
     .optional(),
   oneOf: z
-    .lazy(() => z.array(z.union([SchemaObject, ReferenceObject])))
+    .lazy(() => z.array(z.union([ReferenceObject, SchemaObject])))
     .optional(),
   anyOf: z
-    .lazy(() => z.array(z.union([SchemaObject, ReferenceObject])))
+    .lazy(() => z.array(z.union([ReferenceObject, SchemaObject])))
     .optional(),
-  not: z.lazy(() => z.union([SchemaObject, ReferenceObject])).optional(),
-  items: z.lazy(() => z.union([SchemaObject, ReferenceObject])).optional(),
+  not: z.lazy(() => z.union([ReferenceObject, SchemaObject])).optional(),
+  items: z.lazy(() => z.union([ReferenceObject, SchemaObject])).optional(),
   properties: z
-    .lazy(() => z.record(z.union([SchemaObject, ReferenceObject])))
+    .lazy(() => z.record(z.union([ReferenceObject, SchemaObject])))
     .optional(),
   additionalProperties: z
     .lazy(() => z.union([z.boolean(), SchemaObject, ReferenceObject]))
@@ -98,7 +106,7 @@ export const SchemaObject: z.ZodType<SchemaObject> = baseSchemaObject.extend({
 
 export type MediaTypeObject = z.infer<typeof MediaTypeObject>;
 export const MediaTypeObject = z.object({
-  schema: z.union([SchemaObject, ReferenceObject]).optional(),
+  schema: z.union([ReferenceObject, SchemaObject]).optional(),
   example: z.any().optional(),
   examples: z.any().optional(),
   encoding: z.any().optional(),
@@ -122,7 +130,7 @@ const baseParameterObject = z.object({
     .optional(),
   explode: z.boolean().optional(),
   allowReserved: z.boolean().optional(),
-  schema: z.union([SchemaObject, ReferenceObject]),
+  schema: z.union([ReferenceObject, SchemaObject]),
   example: z.any().optional(),
   examples: z.any().optional(),
   content: z.record(MediaTypeObject).optional(),
@@ -152,7 +160,7 @@ export const RequestBodyObject = z.object({
 export type ResponseObject = z.infer<typeof ResponseObject>;
 export const ResponseObject = z.object({
   description: z.string().optional(),
-  headers: z.record(z.union([HeaderObject, ReferenceObject])).optional(),
+  headers: z.record(z.union([ReferenceObject, HeaderObject])).optional(),
   content: z.record(MediaTypeObject).optional(),
   links: z.record(z.any()).optional(),
 });
@@ -164,9 +172,9 @@ export const OperationObject = z.object({
   description: z.string().optional(),
   externalDocs: ExternalDocumentationObject.optional(),
   operationId: z.string().optional(),
-  parameters: z.array(z.union([ParameterObject, ReferenceObject])).optional(),
+  parameters: z.array(z.union([ReferenceObject, ParameterObject])).optional(),
   requestBody: RequestBodyObject.optional(),
-  responses: z.record(z.union([ResponseObject, ReferenceObject])),
+  responses: z.record(z.union([ReferenceObject, ResponseObject])),
   callbacks: z.any().optional(),
   deprecated: z.boolean().optional(),
   security: z.array(z.any()).optional(),
@@ -189,14 +197,14 @@ export const PathItemObject = z.object({
 });
 
 export const ComponentsObject = z.object({
-  schemas: z.record(z.union([SchemaObject, ReferenceObject])).optional(),
-  responses: z.record(z.union([ResponseObject, ReferenceObject])).optional(),
-  parameters: z.record(z.union([ParameterObject, ReferenceObject])).optional(),
+  schemas: z.record(z.union([ReferenceObject, SchemaObject])).optional(),
+  responses: z.record(z.union([ReferenceObject, ResponseObject])).optional(),
+  parameters: z.record(z.union([ReferenceObject, ParameterObject])).optional(),
   examples: z.record(z.any()).optional(),
   requestBodies: z
-    .record(z.union([RequestBodyObject, ReferenceObject]))
+    .record(z.union([ReferenceObject, RequestBodyObject]))
     .optional(),
-  headers: z.record(z.union([HeaderObject, ReferenceObject])).optional(),
+  headers: z.record(z.union([ReferenceObject, HeaderObject])).optional(),
   securitySchemes: z.record(z.any()).optional(),
   links: z.record(z.any()).optional(),
   callbacks: z.record(z.any()).optional(),
