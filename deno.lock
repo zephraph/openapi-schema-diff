@@ -2,10 +2,53 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "npm:@ast-grep/cli": "npm:@ast-grep/cli@0.18.1",
+      "npm:@ast-grep/cli@0.18.1": "npm:@ast-grep/cli@0.18.1",
       "npm:openai": "npm:openai@3.2.1",
       "npm:ts-pattern": "npm:ts-pattern@5.0.6"
     },
     "npm": {
+      "@ast-grep/cli-darwin-arm64@0.18.1": {
+        "integrity": "sha512-KrJgUa7/iYblJmO3z2ZFq+tjNwJ3LGAVR9vMDsMhSfKVrTmxnq0K4ava3+RvgPu8Knaeldn4RqxudOxpDQ4QuA==",
+        "dependencies": {}
+      },
+      "@ast-grep/cli-darwin-x64@0.18.1": {
+        "integrity": "sha512-d+pSoNCzF55MK7a5UUjMHpOfUIG6tiMaqE0Sd6Yf4QfUTC58F6EeFftwZGQcQQJg/zoJieeKhiawhv0kw57XdA==",
+        "dependencies": {}
+      },
+      "@ast-grep/cli-linux-arm64-gnu@0.18.1": {
+        "integrity": "sha512-8N2z0VOfmzFd+swTrD3M/BPNnkAkAqQAkEC6LF2Oiu2yFGpyfZ0gp6jZkrZaLamG18QmJChNYxGI9oeOlWBEmA==",
+        "dependencies": {}
+      },
+      "@ast-grep/cli-linux-x64-gnu@0.18.1": {
+        "integrity": "sha512-/16KCHBuX4XRSJmQrBCWaNVmgC/CBY0ux18O6efwcQiHq4l/uuXqgKg33x2SCzn5r7adjcth7l3pZR3IVJWvgQ==",
+        "dependencies": {}
+      },
+      "@ast-grep/cli-win32-arm64-msvc@0.18.1": {
+        "integrity": "sha512-gckZnV3i4u1wiUJbxYoZtQK0a3Vxs5RKvJTSZUDYepHIVgqiPAUlByqz0k3W/lE0oeZHOIvL/hw4kVfXI6jCKg==",
+        "dependencies": {}
+      },
+      "@ast-grep/cli-win32-ia32-msvc@0.18.1": {
+        "integrity": "sha512-if81mYr+oLEdQHG//c5mFRE7GksDDxR8iL0IrCXGSQAPhsc0fzBAwYWG+QPFR4gkThDDMUpM/P6o9HXAtlvFSg==",
+        "dependencies": {}
+      },
+      "@ast-grep/cli-win32-x64-msvc@0.18.1": {
+        "integrity": "sha512-LdPhyf8kn414ZgD1Y/iEcv7JjBKWtG5mLjZv9wxiIqSM3BbtO+zl3p3hFn0OoLBiDuCpbKjh4jyP8Kv0iqXKcQ==",
+        "dependencies": {}
+      },
+      "@ast-grep/cli@0.18.1": {
+        "integrity": "sha512-8ldyMB+lsY+elyai7Pd2Wmg7HsFkWo6MJNq+7ngP9SaqpQd7ijaiuux11sVhWKfQOCQ8nR78RQ1ZrMlCnCHkPw==",
+        "dependencies": {
+          "@ast-grep/cli-darwin-arm64": "@ast-grep/cli-darwin-arm64@0.18.1",
+          "@ast-grep/cli-darwin-x64": "@ast-grep/cli-darwin-x64@0.18.1",
+          "@ast-grep/cli-linux-arm64-gnu": "@ast-grep/cli-linux-arm64-gnu@0.18.1",
+          "@ast-grep/cli-linux-x64-gnu": "@ast-grep/cli-linux-x64-gnu@0.18.1",
+          "@ast-grep/cli-win32-arm64-msvc": "@ast-grep/cli-win32-arm64-msvc@0.18.1",
+          "@ast-grep/cli-win32-ia32-msvc": "@ast-grep/cli-win32-ia32-msvc@0.18.1",
+          "@ast-grep/cli-win32-x64-msvc": "@ast-grep/cli-win32-x64-msvc@0.18.1",
+          "detect-libc": "detect-libc@2.0.2"
+        }
+      },
       "asynckit@0.4.0": {
         "integrity": "sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==",
         "dependencies": {}
@@ -24,6 +67,10 @@
       },
       "delayed-stream@1.0.0": {
         "integrity": "sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==",
+        "dependencies": {}
+      },
+      "detect-libc@2.0.2": {
+        "integrity": "sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw==",
         "dependencies": {}
       },
       "follow-redirects@1.15.2": {

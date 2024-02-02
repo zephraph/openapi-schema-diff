@@ -1,7 +1,8 @@
 {
   "editor.defaultFormatter": "denoland.vscode-deno",
-  "[typescript]": {
+  "[markdown]": {
     "editor.defaultFormatter": "denoland.vscode-deno"
   },
-  "prettier.enable": false
+  "prettier.enable": false,
+  "deno.enable": true
 }
