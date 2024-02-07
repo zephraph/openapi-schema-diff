@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
-import { compareOpenApiSchemas } from "../src/main.ts";
+import { diffSchemas } from "../src/schema-diff.ts";
 
 const info = {
   title: "test",
@@ -46,7 +46,7 @@ Deno.test(function adding_response_body_schema() {
     },
   } as const;
 
-  const diff = compareOpenApiSchemas(source, target);
+  const diff = diffSchemas(source, target);
   assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
@@ -119,7 +119,7 @@ Deno.test(function adding_response_body_schema_for_status_code() {
     },
   } as const;
 
-  const diff = compareOpenApiSchemas(source, target);
+  const diff = diffSchemas(source, target);
   assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
@@ -190,7 +190,7 @@ Deno.test(function removing_response_body_schemas() {
     },
   } as const;
 
-  const diff = compareOpenApiSchemas(source, target);
+  const diff = diffSchemas(source, target);
   assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
@@ -263,7 +263,7 @@ Deno.test(function removing_response_body_schema_for_status_code() {
     },
   } as const;
 
-  const diff = compareOpenApiSchemas(source, target);
+  const diff = diffSchemas(source, target);
   assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
@@ -344,7 +344,7 @@ Deno.test(function adding_response_body_schema_property() {
     },
   } as const;
 
-  const diff = compareOpenApiSchemas(source, target);
+  const diff = diffSchemas(source, target);
   assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
@@ -444,7 +444,7 @@ Deno.test(function removing_schema_property() {
     },
   } as const;
 
-  const diff = compareOpenApiSchemas(source, target);
+  const diff = diffSchemas(source, target);
   assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],
@@ -544,7 +544,7 @@ Deno.test(function adding_schema_property() {
     },
   } as const;
 
-  const diff = compareOpenApiSchemas(source, target);
+  const diff = diffSchemas(source, target);
   assertEquals(diff, {
     isEqual: false,
     sameRoutes: [],

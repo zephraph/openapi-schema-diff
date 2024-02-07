@@ -11,9 +11,9 @@ await build({
   },
   package: {
     // package.json properties
-    name: "@zephraph/openapi-diff",
+    name: "@zephraph/openapi-tools",
     version: Deno.args[0],
-    description: "Finds changes between two OpenAPI schemas.",
+    description: "Tools for working with OpenAPI schemas",
     license: "MIT",
     repository: {
       type: "git",

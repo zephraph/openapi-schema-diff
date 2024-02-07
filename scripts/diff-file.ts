@@ -1,9 +1,9 @@
 #! /usr/bin/env deno run --allow-env --allow-read --allow-run=/usr/bin/git
 import $ from "https://deno.land/x/dax@0.37.1/mod.ts";
-import { compareOpenApiSchemas } from "../src/main.ts";
+import { diffSchemas } from "../src/schema-diff.ts";
 import { Result } from "../src/utils.ts";
 import { match } from "npm:ts-pattern";
-import { SchemaDiff } from "../src/main.ts";
+import { SchemaDiff } from "../src/schema-diff.ts";
 import { outdent } from "https://deno.land/x/outdent@v0.8.0/mod.ts";
 import { dirname, relative } from "https://deno.land/std@0.213.0/path/mod.ts";
 
@@ -134,7 +134,7 @@ for (const commit of commits) {
   const oldApi = await showFileAtCommit(relativeFilePath, previousCommit.hash);
 
   const diff = Result.from(() =>
-    compareOpenApiSchemas(JSON.parse(newApi), JSON.parse(oldApi))
+    diffSchemas(JSON.parse(newApi), JSON.parse(oldApi))
   );
 
   if (diff.isOk()) {
